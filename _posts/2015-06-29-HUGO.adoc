@@ -34,7 +34,7 @@ $ hugo server --theme=hugo-zen --buildDrafts --watch
 
 ## デプロイ
 
-###gh-pages におく
+### gh-pages におく
 
 ```
 $ git checkout --orphan gh-pages
