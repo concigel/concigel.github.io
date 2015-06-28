@@ -1,0 +1,83 @@
+# HUGO の使い方
+
+## Install 方法
+
+go get して デザインテーマを clone する
+
+```
+$ go get -v github.com/spf13/hugo
+$ git clone --recursive http://github.com/spf13/hugoThemes themes
+$ git clone https://github.com/rakuishi/hugo-zen
+```
+
+## 記事の作成
+
+### 固定ページ
+
+```
+$ hugo new about.md
+```
+
+### ブログページ
+
+```
+$ hugo new post/first.md
+```
+
+## ビルド
+
+ビルドと同時にプレビューする。public 以下に静的HTMLを出力する。
+
+```
+$ hugo server --theme=hugo-zen --buildDrafts --watch
+```
+
+## デプロイ
+
+###gh-pages におく
+
+```
+$ git checkout --orphan gh-pages
+
+# Unstage all files
+$ git rm --cached $(git ls-files)
+
+# Grab one file from the master branch so we can make a commit
+$ git checkout master README.md
+
+# gh-pages ブランチにプッシュ
+$ git add .
+$ git commit -m "INIT: initial commit on gh-pages branch"
+$ git push origin gh-pages
+
+# master ブランチに戻る
+$ git checkout master
+
+# Remove the public folder to make room for the gh-pages subtree
+$ rm -rf public
+
+# Add the gh-pages branch of the repository. It will look like a folder named public
+$ git subtree add --prefix=public git@github.com:spencerlyon2/hugo_gh_blog.git gh-pages --squash
+
+# Pull down the file we just committed. This helps avoid merge conflicts
+$ git subtree pull --prefix=public git@github.com:spencerlyon2/hugo_gh_blog.git gh-pages
+
+# Run hugo. Generated site will be placed in public directory (or omit -t ThemeName if you're not using a theme)
+$ hugo -t ThemeName
+
+# public フォルダを gh-pages ブランチにプッシュ
+$ git add -A
+$ git commit -m "Updating site" && git push origin master
+$ git subtree push --prefix=public git@github.com:spencerlyon2/hugo_gh_blog.git gh-pages
+```
+
+### 個人・組織ページにおく
+
+固定リポジトリ username.github.io にプッシュ
+
+```
+$ cd public
+$ git add -A
+$ git commit -m '$msg'
+$ git push origin master
+```
